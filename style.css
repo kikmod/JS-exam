@@ -1,0 +1,251 @@
+body {
+  background-color: black;
+  color: white; /* Set the default text color to white */
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.sid11 {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 60px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+  transition: left 0.3s ease; 
+}
+
+.sid11.open {
+  left: 200px; 
+}
+
+.emoji-top {
+  font-size: 2rem;
+  margin-top: 10px;
+}
+
+#menu-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  background-color: #fff;
+  border: none;
+  outline: none;
+  z-index: 1100; 
+}
+
+.icons-bottom {
+  margin-top: auto;
+  padding-bottom: 20px;
+}
+
+.icons-bottom i {
+  font-size: 1.5rem; 
+  margin-bottom: 10px;
+}
+
+#sidebar {
+  width: 200px;
+  position: fixed;
+  top: 0;
+  left: -200px;
+  height: 100%;
+  background-color: black !important; 
+  color: white !important; 
+  transition: left 0.3s ease;
+  z-index: 1000; 
+}
+
+#sidebar.open {
+  left: 0; 
+}
+
+#nav-links {
+  display: none;
+  width: 100%;
+  margin-top: 20px; 
+  flex-direction: column;
+  align-items: center;
+}
+
+#sidebar.open #nav-links {
+  display: flex;
+}
+
+#nav-links .nav-link {
+  color: white !important;
+  text-align: center;
+  width: 100%;
+  padding: 10px 0;
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: slideIn 0.5s forwards; 
+}
+
+#nav-links .nav-link:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+#nav-links .nav-link:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+#nav-links .nav-link:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+#nav-links .nav-link:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+#nav-links .nav-link:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.card {
+  position: relative;
+  overflow: hidden; 
+  border: none; 
+}
+
+.card img {
+  height: 300px; 
+  width: 100%;   
+  border-radius: 2%;
+}
+
+.card .card-img-overlay {
+  width: 100%;
+  height: auto;
+  background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)); /* Gradient from white to transparent */
+  padding: 20px; 
+  box-sizing: border-box;
+  color: black; 
+  transform: translateY(100%); 
+  transition: transform 0.3s ease; 
+}
+
+.card:hover .card-img-overlay {
+  transform: translateY(0); 
+}
+
+.card .food-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 50%;
+  left: 0;
+}
+
+.meal-card {
+  margin-bottom: 20px;
+  background-color: transparent;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+#sidebar.open {
+  left: 0;
+}
+
+
+
+#sidebar-close-btn {
+  margin-right: -20px;
+}
+
+#mealDetails {
+  color: white;
+}
+#mealDetails #mealRecipes {
+  background-color: #cff4fc; 
+  border-radius: 5px; /* Border radius */
+  padding: 10px;
+  color: #055160;
+}
+
+.custom-input {
+  background-color: transparent;
+  border: 1px solid #ccc; 
+  color: white;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-input:focus {
+  background-color: transparent; 
+}
+
+#contact-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#contact-form {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+  background-color: transparent;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-transparent {
+  background-color: transparent;
+  border: 1px solid red;
+  color: red;
+  width: 10%;
+}
+.btn-transparent:hover{
+  color: red;
+  background-color: transparent;
+}

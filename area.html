@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>MealDB - Areas</title>
+  <style>
+    .area-card {
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+      margin: 10px;
+      width: calc(25% - 20px); 
+      max-width: 200px;
+    }
+
+    .area-icon {
+      font-size: 4rem;
+    }
+
+    .meal-card {
+      cursor: pointer;
+    }
+
+    /* Ensure only four cards per row */
+    #areas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center; /* Center items horizontally */
+    }
+
+    .meal-card .card {
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.8);
+      transition: transform 0.2s;
+    }
+    .meal-card .card:hover {
+      transform: scale(1.05);
+    }
+    .meal-card img {
+      display: none;
+    }
+    .meal-card img.show {
+      display: block;
+    }
+    .meal-card .card-img-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      color: #000;
+      font-weight: bold;
+      padding-left: 10px;
+      box-sizing: border-box;
+    }
+    .meal-card .food-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+<body>
+  <div class="sid11">
+    <div class="emoji-top text-center mt-2">
+      <button id="menu-btn" class="btn btn-primary">
+        <i class="fas fa-bars"></i>
+      </button>
+      <span>😊</span>
+    </div>
+    <div class="icons-bottom mt-auto mb-2 text-center">
+      <a href="#" class="text-dark d-block"><i class="fas fa-globe"></i></a>
+    <a href="#" class="text-dark">  <i class="fas fa-share-alt"></i></a>
+    </div>
+  </div>
+  <div id="sidebar" class="bg-white p-3 d-flex flex-column justify-content-between">
+    <div>
+      <button id="sidebar-close-btn" class="btn btn-link text-dark float-right">
+        <i class="fas fa-times"></i>
+      </button>
+      <nav id="nav-links" class="nav flex-column mt-3">
+        <a class="nav-link" href="search.html">Search</a>
+        <a class="nav-link" href="category.html">Categories</a> 
+        <a class="nav-link" href="area.html">Area</a>
+        <a class="nav-link" href="#">Ingredients</a>
+        <a class="nav-link" href="contact.html">Contact Us</a>
+      </nav>
+    </div>
+    <div class="text-center mt-4">
+      <div class="d-flex justify-content-center mb-3">
+        <a href="https://facebook.com" target="_blank" class="text-white mx-2"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com" target="_blank" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-white mx-2"><i class="fas fa-globe"></i></a>
+      </div>
+      <p class="mb-0">© 2019 All Rights Reserved.</p>
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <div id="areas" class="text-center">
+      <!-- Areas will be dynamically added here -->
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <div id="meals" class="row">
+      <!-- Meals will be displayed here -->
+    </div>
+  </div>
+  
+
+  <script>
+    async function getAreaMeals(area) {
+      const url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${area}`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        const data = await response.json();
+        displayMeals(data.meals);
+
+        // Hide area cards after displaying meals
+        const areasContainer = document.getElementById('areas');
+        areasContainer.style.display = 'none';
+        const backToAreasBtn = document.getElementById('backToAreas');
+        backToAreasBtn.style.display = 'block';
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
+    }
+
+    // Function to display areas
+    const displayAreas = (areas) => {
+      const areasContainer = document.getElementById('areas');
+      areasContainer.innerHTML = '';
+
+      if (areas) {
+        areas.forEach(area => {
+          const areaCard = document.createElement('div');
+          areaCard.classList.add('area-card');
+          areaCard.setAttribute('onclick', `getAreaMeals('${area.strArea}')`);
+
+          areaCard.innerHTML = `
+            <i class="fa-solid fa-house-laptop area-icon"></i>
+            <h3>${area.strArea}</h3>
+          `;
+
+          areasContainer.appendChild(areaCard);
+        });
+      } else {
+        areasContainer.innerHTML = '<p class="text-center">No areas found.</p>';
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const url = 'https://www.themealdb.com/api/json/v1/1/list.php?a=list';
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        const data = await response.json();
+        displayAreas(data.meals);
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
+
+      const mealsContainer = document.getElementById('meals');
+    });
+
+    // Function to display meals
+    const displayMeals = (meals) => {
+      const mealsContainer = document.getElementById('meals');
+      mealsContainer.innerHTML = ''; 
+
+      if (meals) {
+        meals.forEach(meal => {
+          const mealCard = document.createElement('div');
+          mealCard.classList.add('col-md-3', 'meal-card');
+
+          mealCard.innerHTML = `
+            <div class="card">
+              <div class="card-img-overlay">
+                <div class="food-name">${meal.strMeal}</div>
+              </div>
+              <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="w-100 show">
+            </div>
+          `;
+
+          mealCard.addEventListener('click', () => {
+            localStorage.setItem('mealDetails', JSON.stringify(meal));
+            window.location.href = 'mealDetails.html'; // Redirect to meal details page
+          });
+
+          mealsContainer.appendChild(mealCard);
+        });
+      } else {
+        mealsContainer.innerHTML = '<p class="text-center">No meals found.</p>';
+      }
+    };
+
+    // Sidebar functionality
+    const menuBtn = document.getElementById('menu-btn');
+    const sid11 = document.querySelector('.sid11');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+
+    menuBtn.addEventListener('click', () => {
+      sid11.classList.toggle('open');
+      sidebar.classList.toggle('open');
+      
+      if (sid11.classList.contains('open')) {
+        menuBtn.innerHTML = '<i class="fas fa-times"></i>'; 
+      } else {
+        menuBtn.innerHTML = '<i class="fas fa-bars"></i>'; 
+      }
+    });
+
+    sidebarCloseBtn.addEventListener('click', () => {
+      sid11.classList.remove('open');
+      sidebar.classList.remove('open');
+      menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    });
+
+    // Back to Areas button functionality
+    const backToAreasBtn = document.getElementById('backToAreas');
+    backToAreasBtn.addEventListener('click', () => {
+      const areasContainer = document.getElementById('areas');
+      areasContainer.style.display = 'flex';
+      backToAreasBtn.style.display = 'none';
+
+      const mealsContainer = document.getElementById('meals');
+      mealsContainer.innerHTML = '<p class="text-center">Select an area to view meals.</p>';
+    });
+  </script>
+</body>
+</html>

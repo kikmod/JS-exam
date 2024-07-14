@@ -1,0 +1,195 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Categories - MealDB</title>
+    <style>
+      .card .card-img-overlay {
+        background-color: rgba(255, 255, 255, 0.5); 
+      }
+  
+      .card {
+        overflow: hidden;
+      }
+  
+      .card-img-overlay {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+  
+      .category-card:hover .card-img-overlay {
+        opacity: 1;
+      }
+  
+      .category-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+  
+      .card img {
+        background-color: black;
+        object-fit: contain; 
+      }
+  
+      .category-card {
+        margin-bottom: 20px; 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sid11">
+      <div class="emoji-top text-center mt-2">
+        <button id="menu-btn" class="btn btn-primary">
+          <i class="fas fa-bars"></i>
+        </button>
+        <span>😊</span>
+      </div>
+      <div class="icons-bottom mt-auto mb-2 text-center">
+        <a href="#" class="text-dark d-block"><i class="fas fa-globe"></i></a>
+      <a href="#" class="text-dark">  <i class="fas fa-share-alt"></i></a>
+      </div>
+    </div>
+    <div id="sidebar" class="bg-white p-3 d-flex flex-column justify-content-between">
+      <div>
+        <button id="sidebar-close-btn" class="btn btn-link text-dark float-right">
+          <i class="fas fa-times"></i>
+        </button>
+        <nav id="nav-links" class="nav flex-column mt-3">
+          <a class="nav-link" href="search.html">Search</a>
+          <a class="nav-link" href="category.html">Categories</a> 
+          <a class="nav-link" href="area.html">Area</a>
+          <a class="nav-link" href="#">Ingredients</a>
+          <a class="nav-link" href="contact.html">Contact Us</a>
+        </nav>
+      </div>
+      <div class="text-center mt-4">
+        <div class="d-flex justify-content-center mb-3">
+          <a href="https://facebook.com" target="_blank" class="text-white mx-2"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com" target="_blank" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-white mx-2"><i class="fas fa-globe"></i></a>
+        </div>
+        <p class="mb-0">© 2019 All Rights Reserved.</p>
+      </div>
+    </div>
+  
+    <div class="container mt-4">
+      <div id="categories" class="row">
+        <!-- Categories will be displayed here -->
+      </div>
+      <div id="meals" class="row mt-4">
+        <!-- Meals will be displayed here -->
+      </div>
+    </div>
+    
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+  fetchCategories();
+
+  async function fetchCategories() {
+    const url = 'https://www.themealdb.com/api/json/v1/1/categories.php';
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      const data = await response.json();
+      displayCategories(data.categories);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+
+  function displayCategories(categories) {
+    const categoriesContainer = document.getElementById('categories');
+    categoriesContainer.innerHTML = '';
+
+    if (categories) {
+      categories.forEach(category => {
+        const categoryCard = document.createElement('div');
+        categoryCard.classList.add('col-md-3', 'category-card', 'mb-3');
+
+        categoryCard.innerHTML = `
+          <div class="card position-relative">
+            <div class="card-img-overlay text-center d-flex justify-content-center align-items-center position-absolute">
+              <div class="category-name">${category.strCategory}</div>
+            </div>
+            <img src="${category.strCategoryThumb}" class="w-100" alt="${category.strCategory}">
+          </div>
+        `;
+
+        categoryCard.addEventListener('click', () => {
+          fetchAndDisplayMeals(category.strCategory);
+        });
+
+        categoriesContainer.appendChild(categoryCard);
+      });
+    } else {
+      categoriesContainer.innerHTML = '<p class="text-center">No categories found.</p>';
+    }
+  }
+
+  async function fetchAndDisplayMeals(category) {
+    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      const data = await response.json();
+      displayMeals(data.meals);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+
+  function displayMeals(meals) {
+    const mealsContainer = document.getElementById('meals');
+    mealsContainer.innerHTML = '';
+
+    if (meals) {
+      meals.forEach(meal => {
+        const mealCard = document.createElement('div');
+        mealCard.classList.add('col-md-3', 'meal-card', 'mb-3');
+
+        mealCard.innerHTML = `
+          <div class="card">
+            <img src="${meal.strMealThumb}" class="card-img-top" alt="${meal.strMeal}">
+            <div class="card-body">
+              <h5 class="card-title">${meal.strMeal}</h5>
+              <p class="card-text">Meal ID: ${meal.idMeal}</p>
+            </div>
+          </div>
+        `;
+
+        mealCard.addEventListener('click', () => {
+          localStorage.setItem('mealDetails', JSON.stringify(meal));
+          window.location.href = 'mealDetails.html';
+        });
+
+        mealsContainer.appendChild(mealCard);
+      });
+    } else {
+      mealsContainer.innerHTML = '<p class="text-center">No meals found.</p>';
+    }
+  }
+});
+
+    </script>
+  </body>
+  </html>
+  
+</body>
+</html>
